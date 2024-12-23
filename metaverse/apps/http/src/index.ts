@@ -5,5 +5,6 @@ import client from "@repo/db/client";
 const app = express();
 
 app.use("/api/v1", router);
+app.use(express.json());
 
 app.listen(process.env.PORT || 3000);
