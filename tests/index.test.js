@@ -150,7 +150,7 @@ describe("Authentication", () => {
 
   test("Signin fails if the username and password are incorrect", async () => {
     const username = randomName();
-    const password = "123456";
+    const password = "12345623";
 
     await post(SIGN_UP_URL, {
       username,
