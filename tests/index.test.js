@@ -167,120 +167,120 @@ describe("Authentication", () => {
   });
 });
 
-// describe("User metadata endpoint", () => {
-//   let token = "";
-//   let avatarId = "";
+describe("User metadata endpoint", () => {
+  let token = "";
+  let avatarId = "";
 
-//   beforeAll(async () => {
-//     const username = randomName();
-//     const password = "123456";
+  beforeAll(async () => {
+    const username = randomName();
+    const password = "123456";
 
-//     await post(SIGN_UP_URL, {
-//       username,
-//       password,
-//       type: "admin",
-//     });
+    await post(SIGN_UP_URL, {
+      username,
+      password,
+      type: "admin",
+    });
 
-//     const response = await post(SIGN_IN_URL, {
-//       username,
-//       password,
-//     });
+    const response = await post(SIGN_IN_URL, {
+      username,
+      password,
+    });
 
-//     token = response?.data.token;
+    token = response?.data.token;
 
-//     const avatarResponse = await post(AVATAR_ADMIN_URL, postAvatarData, {
-//       headers: {
-//         authorization: bearerToken(token),
-//       },
-//     });
-//     console.log("avatar response is " + avatarResponse?.data.avatarId);
+    const avatarResponse = await post(AVATAR_ADMIN_URL, postAvatarData, {
+      headers: {
+        authorization: bearerToken(token),
+      },
+    });
+    console.log("avatar response is " + avatarResponse?.data.avatarId);
 
-//     avatarId = avatarResponse.data.avatarId;
-//   });
+    avatarId = avatarResponse.data.avatarId;
+  });
 
-//   test("User cant update their metadata with a wrong avatar id", async () => {
-//     const response = await post(METADATA_URL, wrongAvatarId, {
-//       headers: {
-//         authorization: bearerToken(token),
-//       },
-//     });
+  test("User cant update their metadata with a wrong avatar id", async () => {
+    const response = await post(METADATA_URL, wrongAvatarId, {
+      headers: {
+        authorization: bearerToken(token),
+      },
+    });
 
-//     expect(response.status).toBe(400);
-//   });
+    expect(response.status).toBe(400);
+  });
 
-//   test("User can update their metadata with the right avatar id", async () => {
-//     const response = await post(
-//       METADATA_URL,
-//       { avatarId },
-//       {
-//         headers: {
-//           authorization: bearerToken(token),
-//         },
-//       }
-//     );
+  test("User can update their metadata with the right avatar id", async () => {
+    const response = await post(
+      METADATA_URL,
+      { avatarId },
+      {
+        headers: {
+          authorization: bearerToken(token),
+        },
+      }
+    );
 
-//     expect(response.status).toBe(200);
-//   });
+    expect(response.status).toBe(200);
+  });
 
-//   test("User is not able to update their metadata if the auth header is not present", async () => {
-//     const response = await post(METADATA_URL, { avatarId });
+  test("User is not able to update their metadata if the auth header is not present", async () => {
+    const response = await post(METADATA_URL, { avatarId });
 
-//     expect(response.status).toBe(403);
-//   });
+    expect(response.status).toBe(403);
+  });
 
-//   test("test 3", () => {});
-// });
+  test("test 3", () => {});
+});
 
-// describe("User avatar information", () => {
-//   let avatarId;
-//   let token;
-//   let userId;
+describe("User avatar information", () => {
+  let avatarId;
+  let token;
+  let userId;
 
-//   beforeAll(async () => {
-//     const username = `Haifa-${Math.random()}`;
-//     const password = "123456";
+  beforeAll(async () => {
+    const username = `Haifa-${Math.random()}`;
+    const password = "123456";
 
-//     const signupResponse = await post(SIGN_UP_URL, {
-//       username,
-//       password,
-//       type: "admin",
-//     });
+    const signupResponse = await post(SIGN_UP_URL, {
+      username,
+      password,
+      type: "admin",
+    });
 
-//     userId = signupResponse?.data.userId;
+    userId = signupResponse?.data.userId;
 
-//     console.log("userid is " + userId);
-//     const response = await post(SIGN_IN_URL, {
-//       username,
-//       password,
-//     });
+    console.log("userid is " + userId);
+    const response = await post(SIGN_IN_URL, {
+      username,
+      password,
+    });
 
-//     token = response?.data.token;
+    token = response?.data.token;
 
-//     const avatarResponse = await post(AVATAR_ADMIN_URL, postAvatarData, {
-//       headers: {
-//         authorization: bearerToken(token),
-//       },
-//     });
+    const avatarResponse = await post(AVATAR_ADMIN_URL, postAvatarData, {
+      headers: {
+        authorization: bearerToken(token),
+      },
+    });
 
-//     avatarId = avatarResponse.data.avatarId;
-//   });
+    avatarId = avatarResponse.data.avatarId;
+  });
 
-//   test("Get back avatar information for a user", async () => {
-//     console.log("asking for user with id " + userId);
-//     const response = await get(`${METADATA_BULK_URL}?ids=[${userId}]`);
-//     console.log("response was " + userId);
-//     console.log(JSON.stringify(response.data));
-//     expect(response.data.avatars.length).toBe(1);
-//     expect(response.data.avatars[0].userId).toBe(userId);
-//   });
+  test("Get back avatar information for a user", async () => {
+    console.log("asking for user with id " + userId);
+    const response = await get(`${METADATA_BULK_URL}?ids=${userId}`);
+    console.log("response was " + userId);
+    console.log(JSON.stringify(response.data));
+    expect(response.data.avatars.length).toBe(1);
+    expect(response.data.avatars[0].userId).toBe(userId);
+  });
 
-//   test("Available avatars lists the recently created avatar", async () => {
-//     const response = await get(AVATAR_URL);
-//     expect(response.data.avatars?.length).not.toBe(0);
-//     const currentAvatar = response.data.avatars.find((x) => x.id == avatarId);
-//     expect(currentAvatar).toBeDefined();
-//   });
-// });
+  test("Available avatars lists the recently created avatar", async () => {
+    const response = await get(AVATAR_URL);
+    expect(response.data.avatars?.length).not.toBe(0);
+    const currentAvatar = response.data.avatars.find((x) => x.id == avatarId);
+    expect(currentAvatar).toBeDefined();
+  });
+});
 
 // describe("Space information", () => {
 //   let mapId;
