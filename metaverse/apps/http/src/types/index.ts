@@ -40,6 +40,10 @@ export const AddElementSchema = z.object({
     .min(0, { message: "Y-coordinate must be a non-negative number" }),
 });
 
+export const DeleteElementSchema = z.object({
+  id: z.string().nonempty({ message: "Element ID is required" }),
+});
+
 export const CreateElementSchema = z.object({
   imageUrl: z
     .string()
