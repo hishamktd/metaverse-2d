@@ -80,6 +80,7 @@ export const CreateMapSchema = z.object({
     message:
       "Dimensions must be in the format 'width X height', e.g., '100x200'",
   }),
+  name: z.string().nonempty({ message: "Name is required" }),   
   defaultElements: z
     .array(
       z.object({
