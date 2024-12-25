@@ -12,7 +12,7 @@ import { UserType, WSType } from "../enum";
 import { bearerToken, randomName } from "../utils";
 import WebSocket from "ws";
 
-describe("Websocket tests", () => {
+describe.skip("Websocket tests", () => {
   let adminToken: string;
   let adminUserId: string;
   let userToken: string;

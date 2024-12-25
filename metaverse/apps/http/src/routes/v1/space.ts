@@ -87,6 +87,53 @@ spaceRouter.post("/", userMiddleware, async (req, res) => {
   }
 });
 
+spaceRouter.delete("/element", userMiddleware, async (req, res) => {
+  const parsedData = DeleteElementSchema.safeParse(req.body);
+
+  if (!parsedData.success) {
+    res
+      .status(400)
+      .json({ message: `Validation failed ${parsedData.error.message}` });
+    return;
+  }
+
+  try {
+    const spaceElement = await client.spaceElements.findUnique({
+      where: { id: parsedData.data.id },
+      include: { space: true },
+    });
+
+    if (!spaceElement) {
+      res.status(400).json({ message: "Space element not found" });
+      return;
+    }
+
+    if (spaceElement.space.creatorId !== req.userId) {
+      res.status(403).json({ message: "Forbidden" });
+      return;
+    } else {
+      try {
+        await client.spaceElements.delete({
+          where: { id: parsedData.data.id },
+        });
+
+        res.status(200).json({ message: "Element deleted" });
+        return;
+      } catch (e) {
+        console.log("v1/space.ts line => 264 error", e);
+
+        res.status(500).json({ message: "Internal server error" });
+        return;
+      }
+    }
+  } catch (e) {
+    console.log("v1/space.ts line => 271 error", e);
+
+    res.status(500).json({ message: "Internal server error" });
+    return;
+  }
+});
+
 spaceRouter.delete("/:spaceId", userMiddleware, async (req, res) => {
   try {
     const space = await client.space.findUnique({
@@ -191,8 +238,18 @@ spaceRouter.post("/element", userMiddleware, async (req, res) => {
   try {
     const space = await client.space.findUnique({
       where: { id: parsedData.data.spaceId, creatorId: req.userId },
-      select: { creatorId: true },
+      select: { creatorId: true, width: true, height: true },
     });
+
+    if (
+      parsedData?.data.x < 0 ||
+      parsedData?.data.y < 0 ||
+      parsedData?.data?.x > (space?.width ?? 0) ||
+      parsedData?.data?.y > (space?.height ?? 0)
+    ) {
+      res.status(400).json({ message: "Invalid coordinates" });
+      return;
+    }
 
     if (!space) {
       res.status(400).json({ message: "Space not found" });
@@ -219,53 +276,6 @@ spaceRouter.post("/element", userMiddleware, async (req, res) => {
     }
   } catch (e) {
     console.log("v1/space.ts line => 220 error", e);
-
-    res.status(500).json({ message: "Internal server error" });
-    return;
-  }
-});
-
-spaceRouter.delete("/element", userMiddleware, async (req, res) => {
-  const parsedData = DeleteElementSchema.safeParse(req.body);
-
-  if (!parsedData.success) {
-    res
-      .status(400)
-      .json({ message: `Validation failed ${parsedData.error.message}` });
-    return;
-  }
-
-  try {
-    const spaceElement = await client.spaceElements.findUnique({
-      where: { id: parsedData.data.id },
-      include: { space: true },
-    });
-
-    if (!spaceElement) {
-      res.status(400).json({ message: "Space element not found" });
-      return;
-    }
-
-    if (spaceElement.space.creatorId !== req.userId) {
-      res.status(403).json({ message: "Forbidden" });
-      return;
-    } else {
-      try {
-        await client.spaceElements.delete({
-          where: { id: parsedData.data.id },
-        });
-
-        res.status(200).json({ message: "Element deleted" });
-        return;
-      } catch (e) {
-        console.log("v1/space.ts line => 264 error", e);
-
-        res.status(500).json({ message: "Internal server error" });
-        return;
-      }
-    }
-  } catch (e) {
-    console.log("v1/space.ts line => 271 error", e);
 
     res.status(500).json({ message: "Internal server error" });
     return;
