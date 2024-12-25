@@ -83,6 +83,8 @@ adminRouter.post("/avatar", adminMiddleware, async (req, res) => {
       },
     });
 
+    console.log("avatar", avatar);
+
     res.status(200).json({ id: avatar.id });
   } catch (e) {
     console.log("v1/admin.ts line => 88 error", e);

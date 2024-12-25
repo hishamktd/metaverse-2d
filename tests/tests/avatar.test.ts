@@ -7,6 +7,7 @@ import {
   SIGN_UP_URL,
 } from "../constants";
 import { password, postAvatarData } from "../data";
+import { UserType } from "../enum";
 import { bearerToken, randomName } from "../utils";
 
 describe("User avatar information", () => {
@@ -20,7 +21,7 @@ describe("User avatar information", () => {
     const signupResponse = await post(SIGN_UP_URL, {
       username,
       password,
-      type: "admin",
+      type: UserType.ADMIN,
     });
 
     userId = signupResponse?.data.userId;

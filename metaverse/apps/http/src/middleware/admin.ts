@@ -8,9 +8,13 @@ export const adminMiddleware = (
   next: NextFunction
 ) => {
   const decoded = verifyToken(req, res);
+  console.log("1. decoded", decoded);
 
   if (decoded) {
+    console.log("2. decoded", decoded);
+
     if (decoded.role !== UserType.ADMIN) {
+      console.log("3. decoded", decoded.role, UserType.ADMIN);
       res.status(403).json({ message: "Forbidden" });
       return;
     }

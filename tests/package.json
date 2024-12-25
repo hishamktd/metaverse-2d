@@ -4,7 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "test auth": "jest --testPathPattern=auth.test.ts",
+    "test space": "jest --testPathPattern=space.test.ts",
+    "test arena": "jest --testPathPattern=arena.test.ts",
+    "test admin": "jest --testPathPattern=admin.test.ts",
+    "test avatar": "jest --testPathPattern=avatar.test.ts",
+    "test metadata": "jest --testPathPattern=metadata.test.ts",
+    "test ws": "jest --testPathPattern=ws.test.ts"
   },
   "keywords": [],
   "author": "",

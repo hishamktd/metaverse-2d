@@ -8,6 +8,7 @@ import {
   SPACE_ELEMENT_URL,
 } from "../constants";
 import { password } from "../data";
+import { UserType } from "../enum";
 import { bearerToken, randomName } from "../utils";
 
 describe("Admin Endpoints", () => {
@@ -22,7 +23,7 @@ describe("Admin Endpoints", () => {
     const signupResponse = await post(SIGN_UP_URL, {
       username,
       password,
-      type: "admin",
+      type:UserType.ADMIN,
     });
 
     adminId = signupResponse?.data.userId;
@@ -37,7 +38,7 @@ describe("Admin Endpoints", () => {
     const userSignupResponse = await post(SIGN_UP_URL, {
       username: username + "-user",
       password,
-      type: "user",
+      type: UserType.USER,
     });
 
     userId = userSignupResponse?.data.userId;

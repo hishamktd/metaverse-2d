@@ -1,6 +1,7 @@
 import { post } from "../axios";
 import { SIGN_IN_URL, SIGN_UP_URL } from "../constants";
 import { password } from "../data";
+import { UserType } from "../enum";
 import { randomName } from "../utils";
 
 describe("Authentication", () => {
@@ -9,7 +10,7 @@ describe("Authentication", () => {
     const response = await post(SIGN_UP_URL, {
       username,
       password,
-      type: "admin",
+      type: UserType.ADMIN,
     });
 
     console.log("response is: 109 ", response.data);
@@ -18,7 +19,7 @@ describe("Authentication", () => {
     const updatedResponse = await post(SIGN_UP_URL, {
       username,
       password,
-      type: "admin",
+      type: UserType.ADMIN,
     });
 
     expect(updatedResponse.status).toBe(400);
@@ -40,7 +41,7 @@ describe("Authentication", () => {
     await post(SIGN_UP_URL, {
       username,
       password,
-      type: "admin",
+      type: UserType.ADMIN,
     });
 
     const response = await post(SIGN_IN_URL, {

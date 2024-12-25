@@ -8,6 +8,7 @@ import {
   SPACE_URL,
 } from "../constants";
 import { emptyMapPostData, password, postElementData } from "../data";
+import { UserType } from "../enum";
 import { bearerToken, randomName } from "../utils";
 
 describe("Space information", () => {
@@ -25,7 +26,7 @@ describe("Space information", () => {
     const signupResponse = await post(SIGN_UP_URL, {
       username,
       password,
-      type: "admin",
+      type: UserType.ADMIN,
     });
 
     adminId = signupResponse?.data.userId;
@@ -40,7 +41,7 @@ describe("Space information", () => {
     const userSignupResponse = await post(SIGN_UP_URL, {
       username: username + "-user",
       password,
-      type: "user",
+      type: UserType.USER,
     });
 
     userId = userSignupResponse.data.userId;

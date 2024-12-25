@@ -8,6 +8,7 @@ import {
   SPACE_URL,
 } from "../constants";
 import { password } from "../data";
+import { UserType } from "../enum";
 import { bearerToken, randomName } from "../utils";
 
 describe("Arena endpoints", () => {
@@ -26,7 +27,7 @@ describe("Arena endpoints", () => {
     const signupResponse = await post(SIGN_UP_URL, {
       username,
       password,
-      type: "admin",
+      type: UserType.ADMIN,
     });
 
     adminId = signupResponse?.data.userId;
@@ -41,7 +42,7 @@ describe("Arena endpoints", () => {
     const userSignupResponse = await post(SIGN_UP_URL, {
       username: username + "-user",
       password,
-      type: "user",
+      type: UserType.USER,
     });
 
     userId = userSignupResponse?.data.userId;

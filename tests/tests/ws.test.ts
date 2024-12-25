@@ -8,6 +8,7 @@ import {
   SPACE_URL,
 } from "../constants";
 import { password } from "../data";
+import { UserType, WSType } from "../enum";
 import { bearerToken, randomName } from "../utils";
 
 describe("Websocket tests", () => {
@@ -49,7 +50,7 @@ describe("Websocket tests", () => {
     const adminSignupResponse = await post(SIGN_UP_URL, {
       username,
       password,
-      type: "admin",
+      type: UserType.ADMIN,
     });
 
     const adminSigninResponse = await post(SIGN_IN_URL, {
@@ -65,7 +66,7 @@ describe("Websocket tests", () => {
     const userSignupResponse = await post(SIGN_UP_URL, {
       username: username + `-user`,
       password,
-      type: "user",
+      type: UserType.USER,
     });
     const userSigninResponse = await post(SIGN_IN_URL, {
       username: username + `-user`,
@@ -191,7 +192,7 @@ describe("Websocket tests", () => {
     console.log("insixce first test");
     ws1.send(
       JSON.stringify({
-        type: "join",
+        type: WSType.JOIN,
         payload: {
           spaceId: spaceId,
           token: adminToken,
@@ -206,7 +207,7 @@ describe("Websocket tests", () => {
 
     ws2.send(
       JSON.stringify({
-        type: "join",
+        type: WSType.JOIN,
         payload: {
           spaceId: spaceId,
           token: userToken,
@@ -218,11 +219,11 @@ describe("Websocket tests", () => {
     const message2: any = await waitForAndPopLatestMessage(ws2Messages);
     const message3: any = await waitForAndPopLatestMessage(ws1Messages);
 
-    expect(message1.type).toBe("space-joined");
-    expect(message2.type).toBe("space-joined");
+    expect(message1.type).toBe(WSType.SPACE_JOINED);
+    expect(message2.type).toBe(WSType.SPACE_JOINED);
     expect(message1.payload.users.length).toBe(0);
     expect(message2.payload.users.length).toBe(1);
-    expect(message3.type).toBe("user-joined");
+    expect(message3.type).toBe(WSType.USER_JOINED);
     expect(message3.payload.x).toBe(message2.payload.spawn.x);
     expect(message3.payload.y).toBe(message2.payload.spawn.y);
     expect(message3.payload.userId).toBe(userId);
@@ -237,7 +238,7 @@ describe("Websocket tests", () => {
   test("User should not be able to move across the boundary of the wall", async () => {
     ws1.send(
       JSON.stringify({
-        type: "move",
+        type: WSType.MOVE,
         payload: {
           x: 1000000,
           y: 10000,
@@ -247,7 +248,7 @@ describe("Websocket tests", () => {
 
     const message: any = await waitForAndPopLatestMessage(ws1Messages);
 
-    expect(message.type).toBe("movement-rejected");
+    expect(message.type).toBe(WSType.MOVEMENT_REJECTED);
     expect(message.payload.x).toBe(adminX);
     expect(message.payload.y).toBe(adminY);
   });
@@ -255,7 +256,7 @@ describe("Websocket tests", () => {
   test("User should not be able to move two blocks at the same time", async () => {
     ws1.send(
       JSON.stringify({
-        type: "move",
+        type: WSType.MOVE,
         payload: {
           x: adminX + 2,
           y: adminY,
@@ -265,7 +266,7 @@ describe("Websocket tests", () => {
 
     const message: any = await waitForAndPopLatestMessage(ws1Messages);
 
-    expect(message.type).toBe("movement-rejected");
+    expect(message.type).toBe(WSType.MOVEMENT_REJECTED);
     expect(message.payload.x).toBe(adminX);
     expect(message.payload.y).toBe(adminY);
   });
@@ -273,7 +274,7 @@ describe("Websocket tests", () => {
   test("Correct movement should be broadcasted to the other sockets in the room", async () => {
     ws1.send(
       JSON.stringify({
-        type: "move",
+        type: WSType.MOVE,
         payload: {
           x: adminX + 1,
           y: adminY,
@@ -284,7 +285,7 @@ describe("Websocket tests", () => {
 
     const message: any = await waitForAndPopLatestMessage(ws2Messages);
 
-    expect(message.type).toBe("movement");
+    expect(message.type).toBe(WSType.MOVEMENT);
     expect(message.payload.x).toBe(adminX + 1);
     expect(message.payload.y).toBe(adminY);
   });
@@ -294,7 +295,7 @@ describe("Websocket tests", () => {
 
     const message: any = await waitForAndPopLatestMessage(ws2Messages);
 
-    expect(message.type).toBe("user-left");
+    expect(message.type).toBe(WSType.USER_LEFT);
     expect(message.payload.userId).toBe(adminUserId);
   });
 });

@@ -1,4 +1,4 @@
 export enum UserType {
-  ADMIN = "admin",
-  USER = "user",
+  ADMIN = "Admin",
+  USER = "User",
 }

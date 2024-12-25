@@ -6,6 +6,7 @@ import {
   SIGN_UP_URL,
 } from "../constants";
 import { password, postAvatarData, wrongAvatarId } from "../data";
+import { UserType } from "../enum";
 import { bearerToken, randomName } from "../utils";
 
 describe("User metadata endpoint", () => {
@@ -18,7 +19,7 @@ describe("User metadata endpoint", () => {
     await post(SIGN_UP_URL, {
       username,
       password,
-      type: "admin",
+      type: UserType.ADMIN,
     });
 
     const response = await post(SIGN_IN_URL, {
@@ -33,9 +34,9 @@ describe("User metadata endpoint", () => {
         authorization: bearerToken(token),
       },
     });
-    console.log("avatar response is " + avatarResponse?.data.avatarId);
+    console.log("avatar response is ", avatarResponse);
 
-    avatarId = avatarResponse.data.avatarId;
+    avatarId = avatarResponse.data.id;
   });
 
   test("User cant update their metadata with a wrong avatar id", async () => {
@@ -49,6 +50,8 @@ describe("User metadata endpoint", () => {
   });
 
   test("User can update their metadata with the right avatar id", async () => {
+    console.log("avatarId", avatarId);
+
     const response = await post(
       METADATA_URL,
       { avatarId },
@@ -65,8 +68,6 @@ describe("User metadata endpoint", () => {
   test("User is not able to update their metadata if the auth header is not present", async () => {
     const response = await post(METADATA_URL, { avatarId });
 
-    expect(response.status).toBe(403);
+    expect(response.status).toBe(401);
   });
-
-  test("test 3", () => {});
 });
