@@ -80,20 +80,16 @@ export const CreateMapSchema = z.object({
     message:
       "Dimensions must be in the format 'width X height', e.g., '100x200'",
   }),
-  name: z.string().nonempty({ message: "Name is required" }),   
-  defaultElements: z
-    .array(
-      z.object({
-        elementId: z.string().nonempty({ message: "Element ID is required" }),
-        x: z
-          .number()
-          .min(0, { message: "X-coordinate must be a non-negative number" }),
-        y: z
-          .number()
-          .min(0, { message: "Y-coordinate must be a non-negative number" }),
-      })
-    )
-    .nonempty({
-      message: "Default elements must include at least one element",
-    }),
+  name: z.string().nonempty({ message: "Name is required" }),
+  defaultElements: z.array(
+    z.object({
+      elementId: z.string().nonempty({ message: "Element ID is required" }),
+      x: z
+        .number()
+        .min(0, { message: "X-coordinate must be a non-negative number" }),
+      y: z
+        .number()
+        .min(0, { message: "Y-coordinate must be a non-negative number" }),
+    })
+  ),
 });

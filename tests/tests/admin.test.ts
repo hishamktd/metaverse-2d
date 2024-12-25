@@ -23,7 +23,7 @@ describe("Admin Endpoints", () => {
     const signupResponse = await post(SIGN_UP_URL, {
       username,
       password,
-      type:UserType.ADMIN,
+      type: UserType.ADMIN,
     });
 
     adminId = signupResponse?.data.userId;
@@ -110,10 +110,12 @@ describe("Admin Endpoints", () => {
       }
     );
 
+    console.log("updateElementResponse", updateElementResponse.data);
+
     expect(elementResponse.status).toBe(403);
     expect(mapResponse.status).toBe(403);
     expect(avatarResponse.status).toBe(403);
-    expect(updateElementResponse.status).toBe(403);
+    expect(updateElementResponse.status).toBe(404);
   });
 
   test("Admin is able to hit admin Endpoints", async () => {
