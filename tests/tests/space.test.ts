@@ -66,8 +66,7 @@ describe("Space information", () => {
     });
     element1Id = element1Response.data.id;
     element2Id = element2Response.data.id;
-    console.log(element2Id);
-    console.log(element1Id);
+
     const mapResponse = await post(
       MAP_URL,
       {
@@ -98,8 +97,6 @@ describe("Space information", () => {
         },
       }
     );
-    console.log("mapResponse.status");
-    console.log(mapResponse.data.id);
 
     mapId = mapResponse.data.id;
   });
@@ -232,8 +229,6 @@ describe("Space information", () => {
         },
       }
     );
-    console.log("Hi im here line 511");
-    console.log(spaceCreateResponse.data);
 
     const response: any = await get(SPACE_ALL_URL, {
       headers: {

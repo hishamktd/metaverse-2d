@@ -13,8 +13,6 @@ describe("Authentication", () => {
       type: UserType.ADMIN,
     });
 
-    console.log("response is: 109 ", response.data);
-
     expect(response.status).toBe(201);
     const updatedResponse = await post(SIGN_UP_URL, {
       username,

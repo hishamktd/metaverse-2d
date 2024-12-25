@@ -133,7 +133,7 @@ describe("Arena endpoints", () => {
         },
       }
     );
-    console.log(spaceResponse.data);
+
     spaceId = spaceResponse.data.spaceId;
   });
 
@@ -154,8 +154,6 @@ describe("Arena endpoints", () => {
       },
     });
 
-    console.log(response.data);
-
     expect(response.data.dimensions).toBe("100x200");
     expect(response.data.elements.length).toBe(3);
   });
@@ -166,8 +164,6 @@ describe("Arena endpoints", () => {
         authorization: bearerToken(userToken),
       },
     });
-
-    console.log(response.data.elements[0].id);
 
     let res = await del(SPACE_ELEMENT_URL, {
       data: { id: response.data.elements[0].id },

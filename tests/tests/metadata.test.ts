@@ -49,8 +49,6 @@ describe("User metadata endpoint", () => {
   });
 
   test("User can update their metadata with the right avatar id", async () => {
-    console.log("avatarId", avatarId);
-
     const response = await post(
       METADATA_URL,
       { avatarId },

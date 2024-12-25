@@ -26,7 +26,6 @@ describe("User avatar information", () => {
 
     userId = signupResponse?.data.userId;
 
-    console.log("userid is " + userId);
     const response = await post(SIGN_IN_URL, {
       username,
       password,
@@ -44,17 +43,11 @@ describe("User avatar information", () => {
   });
 
   test("Get back avatar information for a user", async () => {
-    console.log("asking for user with id " + userId);
-
     const response: any = await get(`${METADATA_BULK_URL}?ids=${userId}`, {
       headers: {
         authorization: bearerToken(token),
       },
     });
-
-    console.log("response was " + userId);
-
-    console.log(JSON.stringify(response.data));
 
     expect(response.data.avatars.length).toBe(1);
 
@@ -67,8 +60,6 @@ describe("User avatar information", () => {
         authorization: bearerToken(token),
       },
     });
-
-    console.log("avatar id is " + avatarId);
 
     expect(response.data.avatars?.length).not.toBe(0);
 
