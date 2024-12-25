@@ -40,13 +40,17 @@ describe("User avatar information", () => {
       },
     });
 
-    avatarId = avatarResponse.data.avatarId;
+    avatarId = avatarResponse.data.id;
   });
 
   test("Get back avatar information for a user", async () => {
     console.log("asking for user with id " + userId);
 
-    const response: any = await get(`${METADATA_BULK_URL}?ids=${userId}`);
+    const response: any = await get(`${METADATA_BULK_URL}?ids=${userId}`, {
+      headers: {
+        authorization: bearerToken(token),
+      },
+    });
 
     console.log("response was " + userId);
 
@@ -58,7 +62,15 @@ describe("User avatar information", () => {
   });
 
   test("Available avatars lists the recently created avatar", async () => {
-    const response: any = await get(AVATAR_URL);
+    const response: any = await get(AVATAR_URL, {
+      headers: {
+        authorization: bearerToken(token),
+      },
+    });
+
+    console.log("response was ", response.data);
+
+    console.log("avatar id is " + avatarId);
 
     expect(response.data.avatars?.length).not.toBe(0);
 
