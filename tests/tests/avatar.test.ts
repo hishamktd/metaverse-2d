@@ -68,8 +68,6 @@ describe("User avatar information", () => {
       },
     });
 
-    console.log("response was ", response.data);
-
     console.log("avatar id is " + avatarId);
 
     expect(response.data.avatars?.length).not.toBe(0);

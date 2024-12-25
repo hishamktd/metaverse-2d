@@ -34,7 +34,6 @@ describe("User metadata endpoint", () => {
         authorization: bearerToken(token),
       },
     });
-    console.log("avatar response is ", avatarResponse);
 
     avatarId = avatarResponse.data.id;
   });

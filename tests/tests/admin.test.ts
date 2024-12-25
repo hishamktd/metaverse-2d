@@ -110,8 +110,6 @@ describe("Admin Endpoints", () => {
       }
     );
 
-    console.log("updateElementResponse", updateElementResponse.data);
-
     expect(elementResponse.status).toBe(403);
     expect(mapResponse.status).toBe(403);
     expect(avatarResponse.status).toBe(403);
