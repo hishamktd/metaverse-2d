@@ -134,7 +134,7 @@ describe("Arena endpoints", () => {
       }
     );
 
-    spaceId = spaceResponse.data.spaceId;
+    spaceId = spaceResponse.data.id;
   });
 
   test("Incorrect spaceId returns a 400", async () => {

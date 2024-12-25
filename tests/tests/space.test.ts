@@ -116,7 +116,7 @@ describe("Space information", () => {
       }
     );
     expect(response.status).toBe(200);
-    expect(response.data.spaceId).toBeDefined();
+    expect(response.data.id).toBeDefined();
   });
 
   test("User is able to create a space without mapId (empty space)", async () => {
@@ -126,7 +126,7 @@ describe("Space information", () => {
       },
     });
 
-    expect(response.data.spaceId).toBeDefined();
+    expect(response.data.id).toBeDefined();
   });
 
   test("User is not able to create a space without mapId and dimensions", async () => {
@@ -169,14 +169,11 @@ describe("Space information", () => {
       }
     );
 
-    const deleteResponse: any = await del(
-      `${SPACE_URL}/${response.data.spaceId}`,
-      {
-        headers: {
-          authorization: bearerToken(userToken),
-        },
-      }
-    );
+    const deleteResponse: any = await del(`${SPACE_URL}/${response.data.id}`, {
+      headers: {
+        authorization: bearerToken(userToken),
+      },
+    });
 
     expect(deleteResponse.status).toBe(200);
   });
@@ -195,14 +192,11 @@ describe("Space information", () => {
       }
     );
 
-    const deleteResponse: any = await del(
-      `${SPACE_URL}/${response.data.spaceId}`,
-      {
-        headers: {
-          authorization: bearerToken(adminToken),
-        },
-      }
-    );
+    const deleteResponse: any = await del(`${SPACE_URL}/${response.data.id}`, {
+      headers: {
+        authorization: bearerToken(adminToken),
+      },
+    });
 
     expect(deleteResponse.status).toBe(403);
   });
@@ -237,7 +231,7 @@ describe("Space information", () => {
     });
 
     const filteredSpace = response.data.spaces.find(
-      (x: any) => x.id == spaceCreateResponse.data.spaceId
+      (x: any) => x.id == spaceCreateResponse.data.id
     );
 
     expect(response.data.spaces.length).toBe(1);

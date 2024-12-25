@@ -34,7 +34,7 @@ spaceRouter.post("/", userMiddleware, async (req, res) => {
         },
       });
 
-      res.status(200).json({ spaceId: space.id });
+      res.status(200).json({ id: space.id });
 
       return;
     } catch (e) {
@@ -77,7 +77,7 @@ spaceRouter.post("/", userMiddleware, async (req, res) => {
         return space;
       });
 
-      res.status(200).json({ spaceId: space.id });
+      res.status(200).json({ id: space.id });
     } catch (e) {
       console.log("v1/space.ts line => 82 error", e);
 

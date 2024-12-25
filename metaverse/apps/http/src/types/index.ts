@@ -26,7 +26,7 @@ export const CreateSpaceSchema = z.object({
     message:
       "Dimensions must be in the format 'width X height', e.g., '100x200'",
   }),
-  mapId: z.string().nonempty({ message: "Map ID is required" }),
+  mapId: z.string().optional(),
 });
 
 export const AddElementSchema = z.object({
