@@ -38,6 +38,8 @@ spaceRouter.post("/", userMiddleware, async (req, res) => {
 
       return;
     } catch (e) {
+      console.log("v1/space.ts line => 41 error", e);
+
       res.status(500).json({ message: "Error creating space" });
       return;
     }
@@ -77,6 +79,8 @@ spaceRouter.post("/", userMiddleware, async (req, res) => {
 
       res.status(200).json({ spaceId: space.id });
     } catch (e) {
+      console.log("v1/space.ts line => 82 error", e);
+
       res.status(500).json({ message: "Internal server error" });
       return;
     }
@@ -102,12 +106,16 @@ spaceRouter.delete("/:spaceId", userMiddleware, async (req, res) => {
           await client.space.delete({ where: { id: req.params.spaceId } });
           res.status(200).json({ message: "Space deleted" });
         } catch (e) {
+          console.log("v1/space.ts line => 109 error", e);
+
           res.status(500).json({ message: "Internal server error" });
           return;
         }
       }
     }
   } catch (e) {
+    console.log("v1/space.ts line => 117 error", e);
+
     res.status(500).json({ message: "Internal server error" });
     return;
   }
@@ -133,6 +141,8 @@ spaceRouter.get("/all", userMiddleware, async (req, res) => {
       })),
     });
   } catch (e) {
+    console.log("v1/space.ts line => 144 error", e);
+
     res.status(500).json({ message: "Internal server error" });
     return;
   }
@@ -160,6 +170,8 @@ spaceRouter.get("/:spaceId", userMiddleware, async (req, res) => {
       })),
     });
   } catch (e) {
+    console.log("v1/space.ts line => 173 error", e);
+
     res.status(500).json({ message: "Internal server error" });
 
     return;
@@ -200,10 +212,14 @@ spaceRouter.post("/element", userMiddleware, async (req, res) => {
       res.status(200).json({ message: "Element added" });
       return;
     } catch (e) {
+      console.log("v1/space.ts line => 215 error", e);
+
       res.status(500).json({ message: "Internal server error" });
       return;
     }
   } catch (e) {
+    console.log("v1/space.ts line => 220 error", e);
+
     res.status(500).json({ message: "Internal server error" });
     return;
   }
@@ -227,13 +243,11 @@ spaceRouter.delete("/element", userMiddleware, async (req, res) => {
 
     if (!spaceElement) {
       res.status(400).json({ message: "Space element not found" });
-
       return;
     }
 
     if (spaceElement.space.creatorId !== req.userId) {
       res.status(403).json({ message: "Forbidden" });
-
       return;
     } else {
       try {
@@ -242,17 +256,18 @@ spaceRouter.delete("/element", userMiddleware, async (req, res) => {
         });
 
         res.status(200).json({ message: "Element deleted" });
-
         return;
       } catch (e) {
-        res.status(500).json({ message: "Internal server error" });
+        console.log("v1/space.ts line => 264 error", e);
 
+        res.status(500).json({ message: "Internal server error" });
         return;
       }
     }
   } catch (e) {
-    res.status(500).json({ message: "Internal server error" });
+    console.log("v1/space.ts line => 271 error", e);
 
+    res.status(500).json({ message: "Internal server error" });
     return;
   }
 });

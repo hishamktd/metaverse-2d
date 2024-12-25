@@ -10,7 +10,7 @@ import client from "@repo/db/client";
 
 export const adminRouter = Router();
 
-adminRouter.post("element", adminMiddleware, async (req, res) => {
+adminRouter.post("/element", adminMiddleware, async (req, res) => {
   const parsedData = CreateElementSchema.safeParse(req.body);
 
   if (!parsedData.success) {
@@ -32,11 +32,13 @@ adminRouter.post("element", adminMiddleware, async (req, res) => {
 
     res.status(200).json({ id: element.id });
   } catch (e) {
+    console.log("v1/admin.ts line => 35 error", e);
+
     res.status(500).json({ message: "Error creating element" });
   }
 });
 
-adminRouter.put("element/:elementId", adminMiddleware, async (req, res) => {
+adminRouter.put("/element/:elementId", adminMiddleware, async (req, res) => {
   const parsedData = UpdateElementSchema.safeParse(req.body);
 
   if (!parsedData.success) {
@@ -56,12 +58,14 @@ adminRouter.put("element/:elementId", adminMiddleware, async (req, res) => {
 
     res.status(200).json({ message: "Element updated" });
   } catch (e) {
+    console.log("v1/admin.ts line => 61 error", e);
+
     res.status(500).json({ message: "Internal server error" });
     return;
   }
 });
 
-adminRouter.post("avatar", adminMiddleware, async (req, res) => {
+adminRouter.post("/avatar", adminMiddleware, async (req, res) => {
   const parsedData = CreateAvatarSchema.safeParse(req.body);
 
   if (!parsedData.success) {
@@ -81,12 +85,14 @@ adminRouter.post("avatar", adminMiddleware, async (req, res) => {
 
     res.status(200).json({ id: avatar.id });
   } catch (e) {
+    console.log("v1/admin.ts line => 88 error", e);
+
     res.status(500).json({ message: "Internal server error" });
     return;
   }
 });
 
-adminRouter.post("map", adminMiddleware, async (req, res) => {
+adminRouter.post("/map", adminMiddleware, async (req, res) => {
   const parsedData = CreateMapSchema.safeParse(req.body);
 
   if (!parsedData.success) {
@@ -116,6 +122,8 @@ adminRouter.post("map", adminMiddleware, async (req, res) => {
 
     res.status(200).json({ id: map.id });
   } catch (e) {
+    console.log("v1/admin.ts line => 125 error", e);
+
     res.status(500).json({ message: "Internal server error" });
     return;
   }

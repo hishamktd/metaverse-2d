@@ -23,7 +23,7 @@ userRouter.post("/metadata", userMiddleware, async (req, res) => {
 
     res.status(200).json({ message: "Metadata updated" });
   } catch (e) {
-    console.log("error", e);
+    console.log("v1/user.ts line => 26 error", e);
 
     res.status(400).json({ message: "User not found" });
     return;
@@ -51,7 +51,8 @@ userRouter.get("/metadata/bulk", userMiddleware, async (req, res) => {
 
     return;
   } catch (e) {
-    console.log("error", e);
+    console.log("v1/user.ts line => 54 error", e);
+
     res.status(400).json({ message: "Internal server error" });
     return;
   }

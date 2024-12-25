@@ -28,6 +28,7 @@ router.post("/signup", async (req, res) => {
         username: parsedData.data.username,
         password: hashedPassword,
         role: parsedData.data.type === "admin" ? "Admin" : "User",
+        avatarId: null,
       },
     });
 
@@ -35,7 +36,9 @@ router.post("/signup", async (req, res) => {
 
     return;
   } catch (e) {
-    res.status(400).json({ message: "User already exists" });
+    console.log("v1/index.ts line => 39 error", e);
+
+    res.status(400).json({ message: "Internal server error" });
     return;
   }
 });
@@ -79,12 +82,28 @@ router.post("/signin", async (req, res) => {
   }
 });
 
-router.get("/elements", (req, res) => {
-  res.json({ message: "elements" });
+router.get("/elements", async (req, res) => {
+  try {
+    const elements = await client.element.findMany({});
+    res.status(200).json({ elements });
+  } catch (e) {
+    console.log("v1/index.ts line => 90 error", e);
+    res.status(500).json({ message: "Internal server error" });
+    return;
+  }
 });
 
-router.get("/avatar", (req, res) => {
-  res.json({ message: "avatar" });
+router.get("/avatar", async (req, res) => {
+  try {
+    const avatars = await client.avatar.findMany({});
+
+    res.status(200).json({ avatars });
+  } catch (e) {
+    console.log("v1/index.ts line => 102 error", e);
+
+    res.status(500).json({ message: "Internal server error" });
+    return;
+  }
 });
 
 router.use("/user", userRouter);
