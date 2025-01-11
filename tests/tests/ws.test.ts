@@ -61,8 +61,6 @@ describe("Websocket tests", () => {
 
     adminUserId = adminSignupResponse?.data.userId;
     adminToken = adminSigninResponse?.data.token;
-    console.log("adminSignupResponse.status");
-    console.log(adminSignupResponse?.status);
 
     const userSignupResponse = await post(SIGN_UP_URL, {
       username: username + `-user`,
@@ -75,7 +73,6 @@ describe("Websocket tests", () => {
     });
     userId = userSignupResponse?.data.userId;
     userToken = userSigninResponse?.data.token;
-    console.log("user-token", userToken);
     const element1Response = await post(
       ELEMENT_URL,
       {
@@ -156,16 +153,12 @@ describe("Websocket tests", () => {
       }
     );
 
-    console.log(spaceResponse?.status);
-    spaceId = spaceResponse?.data.spaceId;
+    spaceId = spaceResponse?.data?.id;
   }
   async function setupWs() {
     ws1 = new WebSocket(WS_URL);
 
     ws1.onmessage = (event) => {
-      console.log("got back a data 1");
-      console.log(event.data);
-
       ws1Messages.push(JSON.parse(event.data.toString()));
     };
     await new Promise((r) => {
@@ -175,8 +168,6 @@ describe("Websocket tests", () => {
     ws2 = new WebSocket(WS_URL);
 
     ws2.onmessage = (event) => {
-      console.log("got back data 2");
-      console.log(event.data);
       ws2Messages.push(JSON.parse(event.data.toString()));
     };
     await new Promise((r) => {
@@ -187,10 +178,9 @@ describe("Websocket tests", () => {
   beforeAll(async () => {
     await setupHTTP();
     await setupWs();
-  }, 5000);
+  }, 10000);
 
   test("Get back ack for joining the space", async () => {
-    console.log("insixce first test");
     ws1.send(
       JSON.stringify({
         type: WSType.JOIN,
@@ -200,11 +190,8 @@ describe("Websocket tests", () => {
         },
       })
     );
-    console.log("insixce first test1");
 
     const message1: any = await waitForAndPopLatestMessage(ws1Messages);
-
-    console.log("insixce first test2");
 
     ws2.send(
       JSON.stringify({
@@ -215,7 +202,6 @@ describe("Websocket tests", () => {
         },
       })
     );
-    console.log("insixce first test3");
 
     const message2: any = await waitForAndPopLatestMessage(ws2Messages);
     const message3: any = await waitForAndPopLatestMessage(ws1Messages);
@@ -298,5 +284,10 @@ describe("Websocket tests", () => {
 
     expect(message.type).toBe(WSType.USER_LEFT);
     expect(message.payload.userId).toBe(adminUserId);
+  });
+
+  afterAll(() => {
+    ws1?.close();
+    ws2?.close();
   });
 });

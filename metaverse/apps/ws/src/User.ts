@@ -123,7 +123,7 @@ export class User {
               this.spaceId!
             );
 
-            return
+            return;
           } else {
             this.send({
               type: MOVEMENT_REJECTED,
@@ -148,6 +148,7 @@ export class User {
       this,
       this.spaceId!
     );
+
     RoomManger.getInstance().removeUser(this, this.spaceId!);
   }
 
