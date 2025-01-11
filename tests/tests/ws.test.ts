@@ -205,14 +205,14 @@ describe("Websocket tests", () => {
 
     const message2: any = await waitForAndPopLatestMessage(ws2Messages);
     const message3: any = await waitForAndPopLatestMessage(ws1Messages);
-
+    
     expect(message1.type).toBe(WSType.SPACE_JOINED);
     expect(message2.type).toBe(WSType.SPACE_JOINED);
     expect(message1.payload.users.length).toBe(0);
     expect(message2.payload.users.length).toBe(1);
     expect(message3.type).toBe(WSType.USER_JOINED);
-    expect(message3.payload.x).toBe(message2.payload.spawn.x);
-    expect(message3.payload.y).toBe(message2.payload.spawn.y);
+    expect(message3.payload.spawn.x).toBe(message2.payload.spawn.x);
+    expect(message3.payload.spawn.y).toBe(message2.payload.spawn.y);
     expect(message3.payload.userId).toBe(userId);
 
     adminX = message1.payload.spawn.x;
