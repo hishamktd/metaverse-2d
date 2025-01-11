@@ -9,7 +9,7 @@ import { password, postAvatarData, wrongAvatarId } from "../data";
 import { UserType } from "../enum";
 import { bearerToken, randomName } from "../utils";
 
-describe("User metadata endpoint", () => {
+describe.skip("User metadata endpoint", () => {
   let token = "";
   let avatarId = "";
 

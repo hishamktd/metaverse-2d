@@ -12,7 +12,7 @@ import { UserType, WSType } from "../enum";
 import { bearerToken, randomName } from "../utils";
 import WebSocket from "ws";
 
-describe.skip("Websocket tests", () => {
+describe("Websocket tests", () => {
   let adminToken: string;
   let adminUserId: string;
   let userToken: string;
@@ -61,8 +61,8 @@ describe.skip("Websocket tests", () => {
 
     adminUserId = adminSignupResponse?.data.userId;
     adminToken = adminSigninResponse?.data.token;
-    // console.log("adminSignupResponse.status");
-    // console.log(adminSignupResponse?.status);
+    console.log("adminSignupResponse.status");
+    console.log(adminSignupResponse?.status);
 
     const userSignupResponse = await post(SIGN_UP_URL, {
       username: username + `-user`,
@@ -75,7 +75,7 @@ describe.skip("Websocket tests", () => {
     });
     userId = userSignupResponse?.data.userId;
     userToken = userSigninResponse?.data.token;
-    // console.log("user-token", userToken);
+    console.log("user-token", userToken);
     const element1Response = await post(
       ELEMENT_URL,
       {
@@ -156,15 +156,15 @@ describe.skip("Websocket tests", () => {
       }
     );
 
-    // console.log(spaceResponse?.status);
+    console.log(spaceResponse?.status);
     spaceId = spaceResponse?.data.spaceId;
   }
   async function setupWs() {
     ws1 = new WebSocket(WS_URL);
 
     ws1.onmessage = (event) => {
-      // console.log("got back a data 1");
-      // console.log(event.data);
+      console.log("got back a data 1");
+      console.log(event.data);
 
       ws1Messages.push(JSON.parse(event.data.toString()));
     };
@@ -175,8 +175,8 @@ describe.skip("Websocket tests", () => {
     ws2 = new WebSocket(WS_URL);
 
     ws2.onmessage = (event) => {
-      // console.log("got back data 2");
-      // console.log(event.data);
+      console.log("got back data 2");
+      console.log(event.data);
       ws2Messages.push(JSON.parse(event.data.toString()));
     };
     await new Promise((r) => {
@@ -187,118 +187,116 @@ describe.skip("Websocket tests", () => {
   beforeAll(async () => {
     await setupHTTP();
     await setupWs();
-  }, 10000);
+  }, 5000);
 
-  //   test("Get back ack for joining the space", async () => {
-  //     console.log("insixce first test");
-  //     ws1.send(
-  //       JSON.stringify({
-  //         type: WSType.JOIN,
-  //         payload: {
-  //           spaceId: spaceId,
-  //           token: adminToken,
-  //         },
-  //       })
-  //     );
-  //     console.log("insixce first test1");
+  test("Get back ack for joining the space", async () => {
+    console.log("insixce first test");
+    ws1.send(
+      JSON.stringify({
+        type: WSType.JOIN,
+        payload: {
+          spaceId: spaceId,
+          token: adminToken,
+        },
+      })
+    );
+    console.log("insixce first test1");
 
-  //     const message1: any = await waitForAndPopLatestMessage(ws1Messages);
+    const message1: any = await waitForAndPopLatestMessage(ws1Messages);
 
-  //     console.log("insixce first test2");
+    console.log("insixce first test2");
 
-  //     ws2.send(
-  //       JSON.stringify({
-  //         type: WSType.JOIN,
-  //         payload: {
-  //           spaceId: spaceId,
-  //           token: userToken,
-  //         },
-  //       })
-  //     );
-  //     console.log("insixce first test3");
+    ws2.send(
+      JSON.stringify({
+        type: WSType.JOIN,
+        payload: {
+          spaceId: spaceId,
+          token: userToken,
+        },
+      })
+    );
+    console.log("insixce first test3");
 
-  //     const message2: any = await waitForAndPopLatestMessage(ws2Messages);
-  //     const message3: any = await waitForAndPopLatestMessage(ws1Messages);
+    const message2: any = await waitForAndPopLatestMessage(ws2Messages);
+    const message3: any = await waitForAndPopLatestMessage(ws1Messages);
 
-  //     expect(message1.type).toBe(WSType.SPACE_JOINED);
-  //     expect(message2.type).toBe(WSType.SPACE_JOINED);
-  //     expect(message1.payload.users.length).toBe(0);
-  //     expect(message2.payload.users.length).toBe(1);
-  //     expect(message3.type).toBe(WSType.USER_JOINED);
-  //     expect(message3.payload.x).toBe(message2.payload.spawn.x);
-  //     expect(message3.payload.y).toBe(message2.payload.spawn.y);
-  //     expect(message3.payload.userId).toBe(userId);
+    expect(message1.type).toBe(WSType.SPACE_JOINED);
+    expect(message2.type).toBe(WSType.SPACE_JOINED);
+    expect(message1.payload.users.length).toBe(0);
+    expect(message2.payload.users.length).toBe(1);
+    expect(message3.type).toBe(WSType.USER_JOINED);
+    expect(message3.payload.x).toBe(message2.payload.spawn.x);
+    expect(message3.payload.y).toBe(message2.payload.spawn.y);
+    expect(message3.payload.userId).toBe(userId);
 
-  //     adminX = message1.payload.spawn.x;
-  //     adminY = message1.payload.spawn.y;
+    adminX = message1.payload.spawn.x;
+    adminY = message1.payload.spawn.y;
 
-  //     userX = message2.payload.spawn.x;
-  //     userY = message2.payload.spawn.y;
-  //   });
+    userX = message2.payload.spawn.x;
+    userY = message2.payload.spawn.y;
+  });
 
-  //   test("User should not be able to move across the boundary of the wall", async () => {
-  //     ws1.send(
-  //       JSON.stringify({
-  //         type: WSType.MOVE,
-  //         payload: {
-  //           x: 1000000,
-  //           y: 10000,
-  //         },
-  //       })
-  //     );
+  test("User should not be able to move across the boundary of the wall", async () => {
+    ws1.send(
+      JSON.stringify({
+        type: WSType.MOVE,
+        payload: {
+          x: 1000000,
+          y: 10000,
+        },
+      })
+    );
 
-  //     const message: any = await waitForAndPopLatestMessage(ws1Messages);
+    const message: any = await waitForAndPopLatestMessage(ws1Messages);
 
-  //     expect(message.type).toBe(WSType.MOVEMENT_REJECTED);
-  //     expect(message.payload.x).toBe(adminX);
-  //     expect(message.payload.y).toBe(adminY);
-  //   });
+    expect(message.type).toBe(WSType.MOVEMENT_REJECTED);
+    expect(message.payload.x).toBe(adminX);
+    expect(message.payload.y).toBe(adminY);
+  });
 
-  //   test("User should not be able to move two blocks at the same time", async () => {
-  //     ws1.send(
-  //       JSON.stringify({
-  //         type: WSType.MOVE,
-  //         payload: {
-  //           x: adminX + 2,
-  //           y: adminY,
-  //         },
-  //       })
-  //     );
+  test("User should not be able to move two blocks at the same time", async () => {
+    ws1.send(
+      JSON.stringify({
+        type: WSType.MOVE,
+        payload: {
+          x: adminX + 2,
+          y: adminY,
+        },
+      })
+    );
 
-  //     const message: any = await waitForAndPopLatestMessage(ws1Messages);
+    const message: any = await waitForAndPopLatestMessage(ws1Messages);
 
-  //     expect(message.type).toBe(WSType.MOVEMENT_REJECTED);
-  //     expect(message.payload.x).toBe(adminX);
-  //     expect(message.payload.y).toBe(adminY);
-  //   });
+    expect(message.type).toBe(WSType.MOVEMENT_REJECTED);
+    expect(message.payload.x).toBe(adminX);
+    expect(message.payload.y).toBe(adminY);
+  });
 
-  //   test("Correct movement should be broadcasted to the other sockets in the room", async () => {
-  //     ws1.send(
-  //       JSON.stringify({
-  //         type: WSType.MOVE,
-  //         payload: {
-  //           x: adminX + 1,
-  //           y: adminY,
-  //           userId: adminId,
-  //         },
-  //       })
-  //     );
+  test("Correct movement should be broadcasted to the other sockets in the room", async () => {
+    ws1.send(
+      JSON.stringify({
+        type: WSType.MOVE,
+        payload: {
+          x: adminX + 1,
+          y: adminY,
+          userId: adminId,
+        },
+      })
+    );
 
-  //     const message: any = await waitForAndPopLatestMessage(ws2Messages);
+    const message: any = await waitForAndPopLatestMessage(ws2Messages);
 
-  //     expect(message.type).toBe(WSType.MOVEMENT);
-  //     expect(message.payload.x).toBe(adminX + 1);
-  //     expect(message.payload.y).toBe(adminY);
-  //   });
+    expect(message.type).toBe(WSType.MOVEMENT);
+    expect(message.payload.x).toBe(adminX + 1);
+    expect(message.payload.y).toBe(adminY);
+  });
 
-  //   test("If a user leaves, the other user receives a leave event", async () => {
-  //     ws1.close();
+  test("If a user leaves, the other user receives a leave event", async () => {
+    ws1.close();
 
-  //     const message: any = await waitForAndPopLatestMessage(ws2Messages);
+    const message: any = await waitForAndPopLatestMessage(ws2Messages);
 
-  //     expect(message.type).toBe(WSType.USER_LEFT);
-  //     expect(message.payload.userId).toBe(adminUserId);
-  //   });
-
-  test("empty test to avoid failure", () => {});
+    expect(message.type).toBe(WSType.USER_LEFT);
+    expect(message.payload.userId).toBe(adminUserId);
+  });
 });

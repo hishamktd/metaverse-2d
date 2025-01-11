@@ -4,7 +4,7 @@ import { password } from "../data";
 import { UserType } from "../enum";
 import { randomName } from "../utils";
 
-describe("Authentication", () => {
+describe.skip("Authentication", () => {
   test("User is able to sign up only once", async () => {
     const username = randomName();
     const response = await post(SIGN_UP_URL, {

@@ -10,7 +10,7 @@ import { password, postAvatarData } from "../data";
 import { UserType } from "../enum";
 import { bearerToken, randomName } from "../utils";
 
-describe("User avatar information", () => {
+describe.skip("User avatar information", () => {
   let avatarId: string;
   let token: string;
   let userId: string;

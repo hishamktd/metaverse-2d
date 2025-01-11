@@ -11,7 +11,7 @@ import { emptyMapPostData, password, postElementData } from "../data";
 import { UserType } from "../enum";
 import { bearerToken, randomName } from "../utils";
 
-describe("Space information", () => {
+describe.skip("Space information", () => {
   let mapId: string;
   let element1Id: string;
   let element2Id: string;

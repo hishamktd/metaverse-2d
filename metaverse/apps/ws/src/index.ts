@@ -16,4 +16,6 @@ wss.on("connection", (ws) => {
   ws.on("close", () => {
     user?.onDestroy();
   });
+
+  ws.send("hello world");
 });

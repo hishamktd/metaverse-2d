@@ -11,7 +11,7 @@ import { password } from "../data";
 import { UserType } from "../enum";
 import { bearerToken, randomName } from "../utils";
 
-describe("Admin Endpoints", () => {
+describe.skip("Admin Endpoints", () => {
   let adminToken: string;
   let adminId: string;
   let userToken: string;

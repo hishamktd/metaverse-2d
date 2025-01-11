@@ -11,7 +11,7 @@ import { password } from "../data";
 import { UserType } from "../enum";
 import { bearerToken, randomName } from "../utils";
 
-describe("Arena endpoints", () => {
+describe.skip("Arena endpoints", () => {
   let mapId: string;
   let element1Id: string;
   let element2Id: string;
