@@ -48,6 +48,9 @@ importers:
       '@types/jsonwebtoken':
         specifier: ^9.0.7
         version: 9.0.7
+      esbuild:
+        specifier: ^0.24.2
+        version: 0.24.2
 
   apps/ui:
     dependencies:

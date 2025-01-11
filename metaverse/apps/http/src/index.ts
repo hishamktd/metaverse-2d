@@ -4,6 +4,8 @@ import { router } from "./routes/v1";
 
 const app = express();
 
+console.log("process.env.NODE_ENV", process.env.NODE_ENV);
+
 app.use(
   cors({
     origin: "http://localhost:3002",
@@ -11,6 +13,8 @@ app.use(
     credentials: false,
   })
 );
+
+console.log("process.env.NODE_ENV", process.env.NODE_ENV);
 
 app.use(express.json());
 
