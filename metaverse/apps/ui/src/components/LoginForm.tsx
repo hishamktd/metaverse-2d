@@ -3,6 +3,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useSession } from "@/hooks/use-session";
+import { API_BASE_URL } from "@/constants";
 
 export default function LoginForm() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -17,7 +18,7 @@ export default function LoginForm() {
 
     try {
       const url = isSignUp ? "/api/v1/signup" : "/api/v1/signin";
-      const response = await axios.post(url, {
+      const response = await axios.post(`${API_BASE_URL}${url}`, {
         username,
         password,
         type: "User",

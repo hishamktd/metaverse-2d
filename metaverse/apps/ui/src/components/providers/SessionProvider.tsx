@@ -1,3 +1,5 @@
+"use client";
+
 import { createContext, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { SessionContextType } from "@/types/session";
