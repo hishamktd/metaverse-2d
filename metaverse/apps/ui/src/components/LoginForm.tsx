@@ -27,6 +27,7 @@ export default function LoginForm() {
         setSession(response.data.token, response.data.userId);
       }
     } catch (err) {
+      console.error(err);
       setError("Authentication failed. Please try again.");
     }
   };
