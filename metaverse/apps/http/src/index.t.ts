@@ -1,4 +1,4 @@
-import { UserType } from "./src/constants";
+import { UserType } from "./constants";
 
 declare global {
   namespace Express {
