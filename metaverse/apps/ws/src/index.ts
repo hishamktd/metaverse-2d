@@ -4,14 +4,9 @@ import { User } from "./User";
 const wss = new WebSocketServer({ port: 3001 });
 
 wss.on("connection", (ws) => {
-  let user: User | null = null;
-  ws.on("error", (error) => {
-    console.log("WebSocket error:", error);
-  });
+  let user = new User(ws);
 
-  ws.on("message", (data) => {
-    user = new User(ws);
-  });
+  ws.on("error", console.error);
 
   ws.on("close", () => {
     user?.onDestroy();

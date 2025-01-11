@@ -33,7 +33,7 @@ export class RoomManger {
 
     this.room.set(
       spaceId,
-      (this.room.get(spaceId) ?? []).filter((u) => u.id !== user.id)
+      this.room.get(spaceId)?.filter((u) => u.id !== user.id) ?? []
     );
   }
 

@@ -4,23 +4,34 @@ import { RoomManger } from "./RoomManger";
 import { OutGoingMessage } from "./types";
 import client from "@repo/db/client";
 import jsw, { JwtPayload } from "jsonwebtoken";
+import { JWT_PASSWORD } from "./config";
 
 const getRandomString = () => Math.random().toString(36).substring(2, 9);
 
-const { JOIN, MOVE, SPACE_JOINED, MOVEMENT_REJECTED, USER_JOINED, USER_LEFT } =
-  WSType;
+const {
+  JOIN,
+  MOVE,
+  SPACE_JOINED,
+  MOVEMENT_REJECTED,
+  USER_JOINED,
+  USER_LEFT,
+  MOVEMENT,
+} = WSType;
 
 export class User {
-  id: string;
+  public id: string;
+  public userId?: string;
   private spaceId?: string;
   private x: number;
   private y: number;
-  private userId?: string;
+  private ws: WebSocket;
 
-  constructor(private ws: WebSocket) {
+  constructor(ws: WebSocket) {
     this.id = getRandomString();
     this.x = 0;
     this.y = 0;
+    this.ws = ws;
+    this.initHandlers();
   }
 
   initHandlers() {
@@ -32,9 +43,7 @@ export class User {
           const spaceId = parsedData.payload.spaceId;
           const token = parsedData.payload.token;
 
-          const userId = (
-            jsw.verify(token, process.env.JWT_SECRET!) as JwtPayload
-          ).userId;
+          const userId = (jsw.verify(token, JWT_PASSWORD) as JwtPayload).userId;
 
           if (!userId) {
             this.ws.close();
@@ -43,7 +52,7 @@ export class User {
 
           this.userId = userId;
 
-          const space = await client.space.findUnique({
+          const space = await client.space.findFirst({
             where: { id: spaceId },
           });
 
@@ -65,9 +74,11 @@ export class User {
                 x: this.x,
                 y: this.y,
               },
-              users: RoomManger.getInstance()
-                .room.get(spaceId)
-                ?.map((u) => ({ id: u.id })),
+              users:
+                RoomManger.getInstance()
+                  .room.get(spaceId)
+                  ?.filter((x) => x.id !== this.id)
+                  ?.map((u) => ({ id: u.id })) ?? [],
             },
           });
 
@@ -92,8 +103,8 @@ export class User {
           const moveX = parsedData.payload.x;
           const moveY = parsedData.payload.y;
 
-          const xDis = Math.abs(moveX - this.x);
-          const yDis = Math.abs(moveY - this.y);
+          const xDis = Math.abs(this.x - moveX);
+          const yDis = Math.abs(this.y - moveY);
 
           if ((xDis === 1 && yDis === 0) || (xDis === 0 && yDis === 1)) {
             this.x = moveX;
@@ -101,7 +112,7 @@ export class User {
 
             RoomManger.getInstance().broadCast(
               {
-                type: MOVE,
+                type: MOVEMENT,
                 payload: {
                   x: this.x,
                   y: this.y,
@@ -111,6 +122,8 @@ export class User {
               this,
               this.spaceId!
             );
+
+            return
           } else {
             this.send({
               type: MOVEMENT_REJECTED,
