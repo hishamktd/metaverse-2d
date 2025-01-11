@@ -1,25 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useSession } from "@/hooks/use-session";
+import api from "@/libs/services/api";
 
 export default function CreateSpaceButton() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [name, setName] = useState("");
   const [dimensions, setDimensions] = useState("100x200");
-  const { token } = useSession();
   const router = useRouter();
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "/api/v1/space",
-        { name, dimensions },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const response = await api.post("/api/v1/space", { name, dimensions });
       router.push(`/spaces/${response.data.id}`);
     } catch (error) {
       console.error("Failed to create space:", error);
