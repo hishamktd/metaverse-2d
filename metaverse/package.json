@@ -2,7 +2,7 @@
   "name": "metaverse",
   "private": true,
   "scripts": {
-    "build": "./deploy.sh",
+    "build": "build.sh",
     "dev": "turbo dev",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
